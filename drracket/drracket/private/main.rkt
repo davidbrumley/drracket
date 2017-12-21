@@ -370,6 +370,13 @@
                      (string-constant test-coverage-summary)
                      editor-panel)
      
+     (letrec ([disable-toolbar (instantiate horizontal-panel% (editor-panel)
+                                             [stretchable-width #f]
+                                             [stretchable-height #f]
+                                             [alignment '(left center)])]
+              [disable-regex (make-object text-field%
+                                       (string-constant proxy-host)
+                                       disable-toobar)]))
      ))
   
   (preferences:add-to-editor-checkbox-panel

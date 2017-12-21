@@ -33,6 +33,13 @@
   (define-struct opt-in/out-toolbar-button (make-button id number) #:transparent)
   (define opt-out-toolbar-buttons '())
   (define opt-in-toolbar-buttons  '())
+  (define hidden-buttons '())
+
+  (define (hide-button id)
+    (set! hidden-buttons (cons id hidden-buttons)))
+
+  (define (unhide-button id)
+    (set! hidden-buttons (remove id hidden-buttons)))
   
   (define (add-opt-out-toolbar-button make-button id #:number [number #f])
     (set! opt-out-toolbar-buttons
