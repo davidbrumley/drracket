@@ -80,6 +80,9 @@
 
 (application:current-app-name (string-constant drscheme))
 
+(preferences:set-default 'drracket:hide-toolbar-for-languages #t boolean?)
+(preferences:set-default 'drracket:hide-toolbar-lang-regexp "#lang *racket/.*" string?)
+
 (preferences:set-default 'drracket:inline-overview-shown? #f boolean?)
 
 (preferences:set-default 'drracket:coverage-show-overview-bar #t boolean?)
@@ -374,7 +377,9 @@
                                              [stretchable-width #f]
                                              [stretchable-height #f]
                                              [alignment '(left center)])]
-              [hide-toolbar-checkbox (make-object check-box% (string-constant hide-toolbar-for-languages) hide-toolbar-panel)]
+              [hide-toolbar-checkbox (make-check-box 'drracket:hide-toolbar-for-languages 
+                                                     (string-constant hide-toolbar-for-languages) 
+                                                     editor-panel)]
               [hide-regex (make-object text-field% "" hide-toolbar-panel)])
                 (void))
      ))
