@@ -379,8 +379,10 @@
                                              [alignment '(left center)])]
               [hide-toolbar-checkbox (make-check-box 'drracket:hide-toolbar-for-languages 
                                                      (string-constant hide-toolbar-for-languages) 
-                                                     editor-panel)]
-              [hide-regex (make-object text-field% "" hide-toolbar-panel)])
+                                                     hide-toolbar-panel)]
+              [hide-regex (new text-field% [label #f] 
+                                           [parent hide-toolbar-panel] 
+                                           [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)])])
                 (void))
      ))
   
