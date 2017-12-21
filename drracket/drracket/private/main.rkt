@@ -374,9 +374,8 @@
                                              [stretchable-width #f]
                                              [stretchable-height #f]
                                              [alignment '(left center)])]
-              [disable-regex (make-object text-field%
-                                       (string-constant proxy-host)
-                                       disable-toobar)]))
+              [disable-regex (make-object text-field% (string-constant proxy-host) disable-toolbar)])
+                (void))
      ))
   
   (preferences:add-to-editor-checkbox-panel
