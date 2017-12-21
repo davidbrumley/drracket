@@ -370,11 +370,11 @@
                      (string-constant test-coverage-summary)
                      editor-panel)
      
-     (letrec ([disable-toolbar (instantiate horizontal-panel% (editor-panel)
+     (letrec ([hide-toolbar (instantiate horizontal-panel% (editor-panel)
                                              [stretchable-width #f]
                                              [stretchable-height #f]
                                              [alignment '(left center)])]
-              [disable-regex (make-object text-field% (string-constant proxy-host) disable-toolbar)])
+              [hide-regex (make-object text-field% (string-constant hide-toolbar-for-languages) hide-toolbar)])
                 (void))
      ))
   
