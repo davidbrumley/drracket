@@ -312,7 +312,25 @@
           (get-read-language-port-start+end the-irl))
         (set! hash-lang-language (and lang-name-end (get-text lang-name-start lang-name-end)))
         (set! hash-lang-last-location (get-read-language-last-position the-irl))
-        
+
+        (define hide-toolbar-for-languages (preferences:get 'drracket:hide-toolbar-for-languages))
+        (define hide-toolbar-lang-regexp (preferences:get 'drracket:hide-toolbar-lang-regexp))
+
+        (define tab (get-tab))
+        (define frame (send tab get-frame))
+
+        (and hash-lang-language 
+             hide-toolbar-for-languages 
+             (regexp-match hide-toolbar-lang-regexp hash-lang-language)
+             (send frame set-toolbar-hidden))
+
+;        (and hash-lang-language 
+;            (message-box "DEBUG" 
+;                   hash-lang-language
+;                   #f
+;                    '(stop ok)))
+
+                             
         (clear-things-out)
 
         (define mode (or (get-definitions-text-surrogate the-irl)
