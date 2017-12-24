@@ -382,11 +382,12 @@
               [hide-toolbar-regex (new text-field% 
                     [label #f] 
                     [parent hide-toolbar-panel] 
-                    [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)]
-                    [callback (λ (textbox evt)
-                      (define value (send textbox get-value))
-                      (preferences:set 'drracket:hide-toolbar-lang-regexp value))])])
+                    [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)])]
+              [close-callback (λ () 
+                     (define value (send hide-toolbar-regex get-value))
+                     (preferences:set 'drracket:hide-toolbar-lang-regexp value))])                 
        (preferences:add-callback 'drracket:hide-toolbar-lang-regexp (λ (p v) (send hide-toolbar-regex set-value v)))
+       (preferences:add-on-close-dialog-callback close-callback)
        (void))))
   
   (preferences:add-to-editor-checkbox-panel
