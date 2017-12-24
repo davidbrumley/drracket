@@ -350,8 +350,7 @@
    (λ (editor-panel)
      (make-check-box 'drracket:open-in-tabs 
                      (string-constant open-files-in-tabs)
-                     editor-panel)
-     
+                     editor-panel)   
 
      (make-check-box 'drracket:show-interactions-on-execute 
                      (string-constant show-interactions-on-execute)
@@ -374,17 +373,20 @@
                      editor-panel)
      
      (letrec ([hide-toolbar-panel (instantiate horizontal-panel% (editor-panel)
-                                             [stretchable-width #f]
-                                             [stretchable-height #f]
-                                             [alignment '(left center)])]
+                    [stretchable-width #f]
+                    [stretchable-height #f]
+                    [alignment '(left center)])]
               [hide-toolbar-checkbox (make-check-box 'drracket:hide-toolbar-for-languages 
-                                                     (string-constant hide-toolbar-for-languages) 
-                                                     hide-toolbar-panel)]
-              [hide-regex (new text-field% [label #f] 
-                                           [parent hide-toolbar-panel] 
-                                           [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)])])
-                (void))
-     ))
+                    (string-constant hide-toolbar-for-languages) 
+                    hide-toolbar-panel)]
+              [hide-toolbar-regex (new text-field% 
+                    [label #f] 
+                    [parent hide-toolbar-panel] 
+                    [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)]
+                    [callback (λ (textbox evt)
+                      (define value (send textbox get-value))
+                      (preferences:set 'drracket:hide-toolbar-lang-regexp value))])])
+       (preferences:add-callback 'drracket:hide-toolbar-lang-regexp (λ (p v) (send hide-toolbar-regex set-value v))))))
   
   (preferences:add-to-editor-checkbox-panel
    (λ (editor-panel)
