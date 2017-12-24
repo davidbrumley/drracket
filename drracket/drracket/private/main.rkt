@@ -386,7 +386,8 @@
                     [callback (λ (textbox evt)
                       (define value (send textbox get-value))
                       (preferences:set 'drracket:hide-toolbar-lang-regexp value))])])
-       (preferences:add-callback 'drracket:hide-toolbar-lang-regexp (λ (p v) (send hide-toolbar-regex set-value v))))))
+       (preferences:add-callback 'drracket:hide-toolbar-lang-regexp (λ (p v) (send hide-toolbar-regex set-value v)))
+       (void))))
   
   (preferences:add-to-editor-checkbox-panel
    (λ (editor-panel)
