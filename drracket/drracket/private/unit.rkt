@@ -1063,7 +1063,6 @@
       
       (inherit set-message set-hidden?)
       (define/public (language-changed new-language vertical?)
-(message-box "language-changed" (or (send new-language get-language-name) "empty") #f '(stop ok))
         (set! define-popup-capability-info
               (get-define-popup-info
                (send new-language capability-value 'drscheme:define-popup)))
