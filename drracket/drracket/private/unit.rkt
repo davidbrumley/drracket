@@ -1063,6 +1063,7 @@
       
       (inherit set-message set-hidden?)
       (define/public (language-changed new-language vertical?)
+(message-box "language-changed" (or (send new-language get-language-name) "empty") #f '(stop ok))
         (set! define-popup-capability-info
               (get-define-popup-info
                (send new-language capability-value 'drscheme:define-popup)))
@@ -1937,10 +1938,11 @@
              [toolbar-left-menu-item #f]
              [toolbar-right-menu-item #f]
              [toolbar-hidden-menu-item #f]
-             [toolbar-menu #f])
+             [toolbar-menu #f]
+             [toolbar-hidden-for-language #f])
       
       ;; returns #t if the toolbar is visible, #f otherwise
-      (define/private (toolbar-shown?) (car toolbar-state))
+      (define/private (toolbar-shown?) (or (car toolbar-state) toolbar-hidden-for-language))
       
       (define/private (change-toolbar-state new-state)
         (set! toolbar-state new-state)
@@ -1953,8 +1955,9 @@
       (define/private (set-toolbar-right) (change-toolbar-state (cons #f 'right)))
       (define/private (set-toolbar-top) (change-toolbar-state (cons #f 'top)))
       (define/private (set-toolbar-top-no-label) (change-toolbar-state (cons #f 'top-no-label)))
-      (define/public (set-toolbar-hidden) (change-toolbar-state (cons #t (cdr toolbar-state))))
-      
+      (define/private (set-toolbar-hidden) (change-toolbar-state (cons #t (cdr toolbar-state))))
+      (define/public (set-toolbar-hidden-for-lang) (set! toolbar-hidden-for-language #t) (update-toolbar-visibility))
+              
       (define/public (update-toolbar-visibility)
         (let* ([hidden? (toolbar-is-hidden?)]
                [left? (toolbar-is-left?)]
@@ -1980,7 +1983,7 @@
         (update-defs/ints-resize-corner))
       
       (define/private (toolbar-is-hidden?)
-        (car (preferences:get 'drracket:toolbar-state)))
+        (or (car (preferences:get 'drracket:toolbar-state)) toolbar-hidden-for-language))
       (define/private (toolbar-is-top?)
         (and (not (toolbar-is-hidden?))
              (equal? (cdr (preferences:get 'drracket:toolbar-state))
@@ -2144,7 +2147,7 @@
          (preferences:get 'framework:show-status-line)))
       
       (define/private (update-defs/ints-resize-corner/pref si-pref)
-        (let ([bottom-material? (and (not (car toolbar-state))
+        (let ([bottom-material? (and (not (or (car toolbar-state) toolbar-hidden-for-language))
                                      si-pref)])
           (let loop ([cs definitions-canvases])
             (cond

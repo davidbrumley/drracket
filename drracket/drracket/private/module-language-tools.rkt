@@ -322,7 +322,7 @@
         (and hash-lang-language 
              hide-toolbar-for-languages 
              (regexp-match hide-toolbar-lang-regexp hash-lang-language)
-             (send frame set-toolbar-hidden))
+             (send frame set-toolbar-hidden-for-lang))
 
 ;        (and hash-lang-language 
 ;            (message-box "DEBUG" 
