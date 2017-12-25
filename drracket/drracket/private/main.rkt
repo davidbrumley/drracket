@@ -80,6 +80,9 @@
 
 (application:current-app-name (string-constant drscheme))
 
+(preferences:set-default 'drracket:hide-toolbar-for-languages #t boolean?)
+(preferences:set-default 'drracket:hide-toolbar-lang-regexp "#lang *racket/.*" string?)
+
 (preferences:set-default 'drracket:inline-overview-shown? #f boolean?)
 
 (preferences:set-default 'drracket:coverage-show-overview-bar #t boolean?)
@@ -347,8 +350,7 @@
    (λ (editor-panel)
      (make-check-box 'drracket:open-in-tabs 
                      (string-constant open-files-in-tabs)
-                     editor-panel)
-     
+                     editor-panel)   
 
      (make-check-box 'drracket:show-interactions-on-execute 
                      (string-constant show-interactions-on-execute)
@@ -370,7 +372,23 @@
                      (string-constant test-coverage-summary)
                      editor-panel)
      
-     ))
+     (letrec ([hide-toolbar-panel (instantiate horizontal-panel% (editor-panel)
+                    [stretchable-width #f]
+                    [stretchable-height #f]
+                    [alignment '(left center)])]
+              [hide-toolbar-checkbox (make-check-box 'drracket:hide-toolbar-for-languages 
+                    (string-constant hide-toolbar-for-languages) 
+                    hide-toolbar-panel)]
+              [hide-toolbar-regex (new text-field% 
+                    [label #f] 
+                    [parent hide-toolbar-panel] 
+                    [init-value (preferences:get 'drracket:hide-toolbar-lang-regexp)])]
+              [close-callback (λ () 
+                     (define value (send hide-toolbar-regex get-value))
+                     (preferences:set 'drracket:hide-toolbar-lang-regexp value))])                 
+       (preferences:add-callback 'drracket:hide-toolbar-lang-regexp (λ (p v) (send hide-toolbar-regex set-value v)))
+       (preferences:add-on-close-dialog-callback close-callback)
+       (void))))
   
   (preferences:add-to-editor-checkbox-panel
    (λ (editor-panel)

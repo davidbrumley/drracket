@@ -33,6 +33,13 @@
   (define-struct opt-in/out-toolbar-button (make-button id number) #:transparent)
   (define opt-out-toolbar-buttons '())
   (define opt-in-toolbar-buttons  '())
+  (define hidden-buttons '())
+
+  (define (hide-button id)
+    (set! hidden-buttons (cons id hidden-buttons)))
+
+  (define (unhide-button id)
+    (set! hidden-buttons (remove id hidden-buttons)))
   
   (define (add-opt-out-toolbar-button make-button id #:number [number #f])
     (set! opt-out-toolbar-buttons
@@ -305,7 +312,25 @@
           (get-read-language-port-start+end the-irl))
         (set! hash-lang-language (and lang-name-end (get-text lang-name-start lang-name-end)))
         (set! hash-lang-last-location (get-read-language-last-position the-irl))
-        
+
+        (define hide-toolbar-for-languages (preferences:get 'drracket:hide-toolbar-for-languages))
+        (define hide-toolbar-lang-regexp (preferences:get 'drracket:hide-toolbar-lang-regexp))
+
+        (define tab (get-tab))
+        (define frame (send tab get-frame))
+
+        (cond
+         [(and hash-lang-language hide-toolbar-for-languages (regexp-match hide-toolbar-lang-regexp hash-lang-language))
+             (send frame set-toolbar-hidden-for-lang #t)]
+         [else (send frame set-toolbar-hidden-for-lang #f)])
+
+;        (and hash-lang-language 
+;            (message-box "DEBUG" 
+;                   hash-lang-language
+;                   #f
+;                    '(stop ok)))
+
+                             
         (clear-things-out)
 
         (define mode (or (get-definitions-text-surrogate the-irl)
