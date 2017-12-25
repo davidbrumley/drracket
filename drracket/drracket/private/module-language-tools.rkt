@@ -319,10 +319,10 @@
         (define tab (get-tab))
         (define frame (send tab get-frame))
 
-        (and hash-lang-language 
-             hide-toolbar-for-languages 
-             (regexp-match hide-toolbar-lang-regexp hash-lang-language)
-             (send frame set-toolbar-hidden-for-lang))
+        (cond
+         [(and hash-lang-language hide-toolbar-for-languages (regexp-match hide-toolbar-lang-regexp hash-lang-language))
+             (send frame set-toolbar-hidden-for-lang #t)]
+         [else (send frame set-toolbar-hidden-for-lang #f)])
 
 ;        (and hash-lang-language 
 ;            (message-box "DEBUG" 

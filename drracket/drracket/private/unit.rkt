@@ -1956,7 +1956,7 @@
       (define/private (set-toolbar-top) (change-toolbar-state (cons #f 'top)))
       (define/private (set-toolbar-top-no-label) (change-toolbar-state (cons #f 'top-no-label)))
       (define/private (set-toolbar-hidden) (change-toolbar-state (cons #t (cdr toolbar-state))))
-      (define/public (set-toolbar-hidden-for-lang) (set! toolbar-hidden-for-language #t) (update-toolbar-visibility))
+      (define/public (set-toolbar-hidden-for-lang value) (set! toolbar-hidden-for-language value) (update-toolbar-visibility))
               
       (define/public (update-toolbar-visibility)
         (let* ([hidden? (toolbar-is-hidden?)]
